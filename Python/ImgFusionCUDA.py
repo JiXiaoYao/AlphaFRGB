@@ -32,6 +32,10 @@ def main():
     else:
         BasePath = os.getcwd()
         FileArray = SearchFile()
+    if(FileArray.shape[0] == 0):
+        print("未发现可以处理的*.png与*[alpha].png")
+        help()
+        return
     print("一共",FileArray.shape[0],"个有效项目,",FileArray.shape[0] * 2,"张原图")
     T2 = time.time()
     print("耗时:",round(T2 - T1,3),"秒")
@@ -43,6 +47,7 @@ def main():
     print("总耗时:",round(T3 - T1,3),"秒")
     print("均速:",round(((FileArray.shape[0]) / (T3 - T2)),3),"张/每秒")
     print("处理结束")
+    os.system('pause')
 
 def Run(Dict):
     global BasePath
@@ -75,6 +80,28 @@ def SearchFile():
                 FileArray.append([files[FileNameId].replace("[alpha]",""),files[FileNameId]])
     return np.asanyarray(FileArray)
 
-print("程序已启动....")
-print("正在引导主函数")
-main()
+def help():
+    sysstr = platform.system()
+    if(sysstr == "Windows"):
+        print("Windows下可以放在文件夹中直接运行")
+        print("或者python ImgFusionCUDA.py [目录]")
+    else:
+        print("Can be run directly in a folder")
+        print("Or python ImgFusionCUDA.py [directory]")
+
+
+if(len(sys.argv) > 1):
+    if(sys.argv[1] == "help"):
+        help()
+    elif(sys.argv[1] == "-h"):
+        help()
+    elif(sys.argv[1] == "--help"):
+        help()
+    else:
+        print("程序已启动....")
+        print("正在引导主函数")
+        main()
+else:
+    print("程序已启动....")
+    print("正在引导主函数")
+    main()
